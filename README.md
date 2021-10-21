@@ -1,3 +1,4 @@
+
 # Portfólio TG - API's - Trabalho de Graduação em BD I
 
 #
@@ -12,13 +13,21 @@
 		<p>O objetivo do API do primeiro semestre, consiste em criar um WEBBOT para automatizar qualquer tipo de operação que será escolhida de forma livre entre as equipes. </p>
 
 
+
 <b>Objetivo do Projeto:</b>
+
+![logo.jpg](https://gitlab.com/cesaraugusto98/webbot/-/raw/master/class/logo.jpg)
 
 Criar um WebBOT capaz de realizar a leitura de CNPJ's de todas as empresas de São José dos Campos e realizar a leitura de qual o tipo de ramo cada empresa. Será possível também, validar qual o capital a empresa possui e se ela está inativa ou ativa.
 
 Com este valores coletados e os pontos inseridos no mapa, será possível visualizar em regiões de São José dos Campos quais delas possuem uma maior quantia de empresa de determinado ramo e capital. 
 
 É possível selecionar no mapa qual ramo e capital deverá ser filtrado. Esta opção é disponibilizada aos usuários para que possam saber se determinada região compensa um possível investimento em determinado ramo.
+
+Caso de Uso do Projeto:
+
+![IMG-20190827-WA0037.jpg](https://gitlab.com/cesaraugusto98/webbot/-/raw/Mapas_geolocaliza%C3%A7ao/Imagens/IMG-20190827-WA0037.jpg)
+
 
 <b>Tecnologias Adotadas na Solução:</b>
 
@@ -42,13 +51,207 @@ Com este valores coletados e os pontos inseridos no mapa, será possível visual
 * Coletar Latitude e Longitude de cada empresa e apontar em um mapa os pontos utilizando a biblioteca Folium e Pandas;
 * Apresentação do projeto;
 
+Utilização da biblioteca Folium - Na prática:
+
+Primeiramente, foi realizada a conexão com a base de dados NoSQL MongoDB, no qual as informações de Latitude e Longitude estavam armazenadas. Com isso, foi possível utilizar a Lib do Folium para criar um mapa de calor e um mapa de pontos em uma determinada região, que no projeto foi escolhida São José dos Campos.
+
+Mapa de calor:
+```python
+import pymongo
+import folium
+
+from folium import plugins
+from pymongo import MongoClient
+
+#REALIZA A CONEXÃO COM O BANCO NO MONGO DB
+db = MongoClient('mongodb+srv://admin:admin@cluster0-vuh1j.azure.mongodb.net/test?retryWrites=true&w=majority')
+
+db = db.get_database('BD_EMPRESAS')
+
+
+collection = db.empresas
+latitude = []
+longitude = []
+qtd_range = []
+coordenadas = []
+
+#GET DE TODAS AS LATITUDES NA COLLECTION EMPRESAS
+latitude = db.get_collection('empresas').distinct("latitude")
+
+qtd_range = len(latitude)
+
+#GET DE TODAS AS LONGITUDES NA COLLECTION EMPRESAS
+longitude = db.get_collection('empresas').distinct("longitude")
+
+#DELIMITA A REGIÃO DE INTERESSE NA BIBLIOTECA FOLIUM
+mapa = folium.Map(location=[-23.4795233,-46.2698754],zoom_start=9)
+
+#É ADICIONADO NO MAPA OS PONTOS COM AS LOCALIZAÇÕES DE LATITUDE E LONGITUDE
+for i in range(qtd_range):
+ coordenadas.append([latitude[i],longitude[i]])
+ mapa.add_child(plugins.HeatMap(coordenadas))
+ 
+#OS PONTOS SÃO ENVIADOS PARA O TEMPLATE MAPA_CALOR.HTML E SÃO TRANSFORMADOS COMO MAPA DE CALOR
+mapa.save("mapa_calor.html")
+
+```
+
+Mapa de pontos:
+```python
+import pymongo
+import folium
+
+from pymongo import MongoClient
+
+#REALIZA A CONEXÃO COM O BANCO NO MONGO DB
+db = MongoClient('mongodb+srv://admin:admin@cluster0-vuh1j.azure.mongodb.net/test?retryWrites=true&w=majority')
+
+db = db.get_database('BD_EMPRESAS')
+
+collection = db.empresas
+cnpj = []
+latitude = []
+longitude = []
+qtd_range = []
+endereco = []
+
+#REALIZA A COLETA DE DADOS DA EMPRESA NA COLLECTION EMPRESAS
+cnpj = db.get_collection('empresas').distinct("cnpj")
+latitude = db.get_collection('empresas').distinct("latitude")
+qtd_range = len(latitude)
+longitude = db.get_collection('empresas').distinct("longitude")
+endereco = db.get_collection('empresas').distinct("endereco")
+
+#DELIMITA A REGIÃO DE INTERESSE NA BIBLIOTECA FOLIUM
+mapa = folium.Map(location=[-23.4795233,-46.2698754],zoom_start=9)
+
+for i in range(qtd_range):
+ folium.Marker([latitude[i], longitude[i]], popup='CNPJ: '+cnpj[i]+'\n Endereco: '+endereco[i]).add_to(mapa)
+
+#É ADICIONADO NO MAPA OS PONTOS COM AS LOCALIZAÇÕES DE LATITUDE E LONGITUDE
+mapa.save("mapa_pontos.html")
+
+```
+
+
 <b>Aprendizados Efetivos</b>
 
-* Trabalho em equipe utilizando a metodologia ágil SCRUM;
-* Aprofundamento na linguagem Python e as bibliotecas Folium e Pandas;
-* Organização de projeto e documentação;
-* Inicialização no framework Django;
+* Trabalho em equipe utilizando a metodologia ágil SCRUM:
+	* Através de Daily's, Sprints, Plannings, Reviews, foi possível entender como funciona de fato a metodologia ágil e qual a proposta de sua implantação em projetos de desenvolvimento.
+
+* Aprofundamento na linguagem Python e as bibliotecas Folium e Pandas:
+	* A linguagem Python foi trazida desde o início do curso e foi desenvolvida durante os semestres, com isso, foi possível compreender suas características e qual é a sua finalidade de utilização. As bibliotecas Folium e Pandas foram importadas e utilizadas no projeto e com isso, foi possível compreender que além destas, outras várias Lib's se encontram disponíveis para serem importadas e utilizadas;
+	
+* Organização de projeto e documentação:
+	* A etapa de documentação foi trazida como requisito do projeto, e os itens para compor a documentação são:
+		* Caso de Uso;
+		* Modelo Entidade Relacionamento de Banco de Dados;
+		* Métricas de BurnDown e conclusão de Sprints;
+		* Matriz de Habilidade de cada integrante;
+		
+* Inicialização no framework Django:
+	* O Framework Django utiliza da linguagem Python para que possamos, de maneira rápida e ágil, criar aplicações Web. Neste projeto foi aprendido a criar o projeto Django e adicionar Apps para que fossem assim criadas as funcionalidades do projeto. Com a conclusão do projeto, foi possível subir o server do Django e publicar o projeto na Web;
+	
 * Funcionamento de web scraping;
+	* Para a coleta de dados de CNPJ e outros dados de empresa e também Latitude e Longitude de sua localização, foi utilizado o Web Scraping, que é um método de coleta de dados através dos templates em html dos sites visitados. 
+
+Coleta de dados utilizando Web Scraping
+```python
+from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+from time import sleep
+
+class Driver:
+
+#MAPEAMENTO DO __INIT__ PARA A LOCALIZAÇÃO DE ARQUIVOS
+ def __init__(self, cep=False, cnpj=False):
+		 directory = 'E:\\FATEC\\PI\\Files'
+		 chrome_options = webdriver.ChromeOptions()
+		 preferences = {"download.default_directory": directory}
+		 chrome_options.add_experimental_option("prefs", preferences)
+		 self.driver = webdriver.Chrome(chrome_options=chrome_options, executable_path='C:\\webbot\\chromedriver')
+		 self.wait = WebDriverWait(self.driver, 5)
+		 self.cep = cep
+		 self.cnpj = cnpj
+		 self.openSite()
+ # self.driver.close()
+ 
+ #FUNÇÃO QUE FARÁ O ACESSO AO SITE DE MAPA CEP E COLETARÁ DADOS DE LATITUDE E LONGITUDE DE ACORDO COM O CEP COLETADO NOS DADOS DA EMPRESA 
+ def openSite(self):
+		 self.driver.maximize_window()
+		 self.driver.get("https://www.mapacep.com.br/index.php")
+		 self.wait.until(EC.presence_of_element_located((By.ID, 'keywords')))
+		 self.driver.find_element_by_id('keywords').send_keys(self.cep)
+		 self.driver.find_element_by_xpath('/html/body/header/div[1]/div/div[2]/div/form/span/button').click()
+		 sleep(10)
+		 print(self.driver.find_element_by_xpath('/html/body/main/div[3]/div/div[1]/p').text)
+		 text = self.driver.find_element_by_xpath('/html/body/main/div[3]/div/div[1]/p').text.split('\n')
+		 # print(text)
+		 # exit()
+		 endereco = text[0]
+		 latitude = text[3].split(' ')[1]
+		 longitude = text[4].split(' ')[1]
+		 print([latitude, longitude, endereco])
+		 if self.cnpj:
+				 try:
+				 self.wait.until(EC.presence_of_element_located((By.ID, 'keywords')))
+				 self.driver.find_element_by_id('keywords').clear()
+				 self.driver.find_element_by_id('keywords').send_keys(self.cnpj[0:14])
+				 self.driver.find_element_by_xpath('/html/body/header/div[1]/div/div[2]/div/form/span/button').click()
+				 sleep(10)
+				 text_cnpj = self.driver.find_element_by_xpath('/html/body/main/div[5]/div/div[1]/p[1]').text
+				 text_cnpj = text_cnpj.split('\n')
+				 print(text_cnpj)
+				 codigo_atividade = text_cnpj[6].split(' ')[7]
+				 nome_empresarial = text_cnpj[4].split(': ')[1]
+				 descricao = text_cnpj[6].split(' ')[9:]
+				 # self.driver.close()
+				 return [latitude, longitude, endereco, codigo_atividade, nome_empresarial]
+		 except:
+				 # self.driver.close()
+				 return [latitude, longitude]
+		 # self.driver.quit()
+		 # print(endereco, latitude, longitude)
+
+#FUNÇÃO QUE REALIZA O DOWNLOAD DO ARQUIVO CONTENDO DADOS DE EMPRESAS
+def getArchives(self):
+		 self.driver.get(
+		 'http://receita.economia.gov.br/orientacao/tributaria/cadastros/cadastro-nacional-de-pessoas-juridicas-cnpj/dados-publicos-cnpj')
+		 links = self.driver.find_elements_by_css_selector('a.external-link')
+		 for link in links:
+				 link.click()
+				 sleep(1)
+				 self.waitDownload()
+
+#FUNÇÃO QUE AUXILIA NO DOWNLOAD DE ARQUIVOS CONTENDO DADOS DE EMPRESAS 	 
+def waitDownload(self):
+		 if not self.driver.current_url.startswith("chrome://downloads"):
+				 self.driver.get("chrome://downloads/")
+				 # elemento = self.wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="leftSpacer"]/h1')))
+				 retorno = self.driver.execute_script("""
+				 var items = downloads.Manager.get().items_;
+				 if (items.every(e => e.state === "COMPLETE"))
+				 return items.map(e => e.fileUrl || e.file_url);
+				 else
+				 return false
+				 """)
+				 # print(retorno)
+				 count = 0
+		 while retorno == False and count < 15:
+				 sleep(1)
+				 retorno = self.driver.execute_script("""
+				 var items = downloads.Manager.get().items_;
+				 if (items.every(e => e.state === "COMPLETE"))
+				 return items.map(e => e.fileUrl || e.file_url);
+				 else
+				 return false
+				 """)
+				 count += 1
+				 # print(retorno)
+				 return
+```
 
 #
 #
@@ -84,6 +287,48 @@ Para que seja criada uma aplicação que atenda os requisitos solicitados pelo c
 
 Com a implementação destas funcionalidades em nosso projeto, foi possível disponibilizar ao cliente uma aplicação capaz de organizar projetos de desenvolvimento, dividido em tarefas e pessoas, com data de conclusão e uma prévia de conclusão de projeto.
 
+**Compatibilidade entre o aplicativo e o mundo real**
+
+1.  A preocupação com o uso de ícones para as principais tarefas gera uma aproximação com o mundo real, trazendo um conforto propiciado pelo natural reconhecimento dos símbolos presentes no dia a dia.
+2.  O mapa centralizado na tela do usuário em referência as televisões que ficam no centro da sala.
+
+![real-virtual](https://gitlab.com/felipemessibraga/pi-phpython/uploads/3586344651689c3fc8d25e4227eae595/real-virtual.JPG)
+**Controle e liberdade para o usuário**
+
+1.  O usuário pode navegar entre as versões do projeto, podendo voltar a uma versão anterior caso a atual não o agrade;
+2.  É possível modificar quase todos os atributos dos projetos, tarefas e pessoas;
+3.  O sistema é responsivo, para se adaptar aos diversos monitores e dispositivos;
+
+**Consistência e padronização**
+
+1.  Os menus respeitam o mesmo padrão de design;
+2.  Os icones apresentam apenas dois tipos, que variam apenas para evidenciar o seu contexto;
+
+**Prevenção de erros**
+
+1.  Existe uma preocupação grande com a prevenção de erros. Todas as decisões que não podem ser desfeitas emitem uma confirmação;
+2.  Os botões respeitam um margem mínima para que não haja cliques "sem querer".
+
+![botoes](https://gitlab.com/felipemessibraga/pi-phpython/uploads/c2e675a3dbf8fbcab70ccadc283f9cf2/botoes.JPG)
+**Eficiência e flexibilidade de uso**
+
+1.  O aplicativo foi pensado para que qualquer pessoa consiga utiliza-lo, por isso apresenta botões com objetivos claros, drag and drop para facilitar a movimentação das tarefas e contraste visual.
+2.  Semelhança na disposição dos menus com ferramentas de uso popular como o Microsoft World;
+
+**Estética e design minimalista**
+
+1.  Deixamos apenas as principais informações em evidência, deixando o maior volume de informações para os relatórios, onde essas informações são idealmente dispostas de forma a não sobrecarregar o visual;
+2.  Sem propagandas ou qualquer informação desnecessária.
+
+![wireframe-minimalista](https://gitlab.com/felipemessibraga/pi-phpython/uploads/4de17b52b70036620bf3c0c01800b9a9/wireframe-minimalista.JPG)
+
+
+**Apresentação Final para o Cliente**
+
+https://www.youtube.com/watch?v=sePaF3FJYkg
+
+#
+
 <b>Tecnologias Adotadas na Solução:</b>
 -   Python - Motivo: Foi realizada uma votação para a utilização da linguagem Python, pois pensamos em utilizar o framework Django;
 -   PostgreSQL - Motivo: Foi realizada uma votação em que a escolha do banco de dados foi o PostgreSQL devido à todos do grupo já terem uma familiaridade com este SGBD;
@@ -97,10 +342,228 @@ Com a implementação destas funcionalidades em nosso projeto, foi possível dis
 
 <b>Contribuições individuais/pessoais</b>
 
-* Criação de todo o Front-End da aplicação; 
+* Criação de cadastros de Projetos, Tarefas, Pessoas, Distribuição de Pessoas em Tarefas
+
+Exemplo de um GET em todos os projetos cadastrados - Javascript
+
+```javascript
+function getAllProjects(){  
+ xhrGetProjeto = new XMLHttpRequest();
+ json = '';
+ xhrGetProjeto.open('GET', URLGETPROJETOS, true);
+ xhrGetProjeto.onreadystatechange = function(){
+ if(xhrGetProjeto.readyState == 4){
+		 if(xhrGetProjeto.status == 200){
+		 json = (JSON.parse(xhrGetProjeto.responseText));
+		 }else if(xhrGetProjeto.status == 404){
+		 }
+	 } 
+	 add_prj_menu_esquerdo(json);
+	 }
+	 xhrGetProjeto.send();
+	}
+```
+
+Exemplo de cadastro de Projeto, utilizando o método POST - Javascript
+
+```javascript
+/*EXEMPLO DE MÉTODO POST PARA A CRIAÇÃO DE UM NOVO PROJETO*/
+
+//UTILIZANDO O MÉTODO NATIVO DO JAVASCRIPT XMLHttpRequest
+ xhrPostProjeto = new XMLHttpRequest();
+ xhrPostProjeto.open("POST", URLGETPROJETOS, true);
+ xhrPostProjeto.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+ xhrPostProjeto.setRequestHeader("X-CSRFToken", csrftoken);
+ xhrPostProjeto.setRequestHeader("withCredentials", 'True');
+ xhrPostProjeto.onreadystatechange = function(){
+ if(xhrPostProjeto.readyState == 4){
+			 if(xhrPostProjeto.status == 201){
+			 getProjeto();
+			 carregaTabelaProjeto();
+			 if((json.length+1) > 1){
+			 habilitaRecuoCodProjeto();
+			 }  
+		 }
+	 }  
+ }
+ xhrPostProjeto.send(JSON.stringify({
+					 'prj_id': codProjeto,
+					 'prj_nome': nomeProjeto, 
+					 'prj_escopo': escopo, 
+					 'prj_datainicio': dt_inicio,
+					 'prj_prazoentrega': dt_prazo,
+					 'prj_color': cor,
+					 "prj_cost": custo,
+					 "prj_hrs_dev": horas_desen,
+					 "prj_progresso": progressoprojeto
+					 }));
+```
+Para a criação deste método foi bastante desafiador obter os conhecimentos necessários de requisições POST, GET, PUT e DELETE e também entender o funcionamento de API's.
+
 * Conexão com API criada com Django Rest Framework;
-* GET, PUT, DELETE E POST com Javascript;
+
+Exemplo das URL's criadas
+```javascript
+//**CADASTRO DE PESSOAS*////
+URLGETPESSOAS = 'http://localhost:8000/person/';
+//**CADASTRO DE PROJETOS*////
+URLGETPROJETOS = 'http://localhost:8000/project/';
+//**CADASTRO DE TAREFAS*////
+URLGETTAREFAS = 'http://localhost:8000/task/';
+//**CADASTRO DE DISTRIBUICAO DE PESSOAS EM TAREFAS*////
+URLGETDISTRIBUICAO = 'http://localhost:8000/distribute/';
+//**CADASTRO DE HABILIDADES*////
+URLGETHABILIDADES = 'http://localhost:8000/habilidades/';
+//**CADASTRO DE DISTRIBUICAO DE HABILIDADES*////
+URLGETDISTRHABILIDADES = 'http://localhost:8000/distributehab/';
+
+```
 * Criação de gráfico GANTT com requisições GET e POST para a Lib do Frappe;
+
+Function criada para carregar o Gráfico de Gantt, contendo todas as informações necessárias cadastradas na aplicação e coletadas através do método GET - Javascript
+
+```javascript
+recebe_projetoGantt = [];
+recebe_tarefaGantt = []
+
+function carregaGantt(jsonProjetosGantt, jsonTarefasGantt){
+  
+ vetor_gantt = [];
+//VALIDA SE O JSON CONTENDO OS DADOS DE PROJETOS ESTÃO VAZIOS
+ if(jsonProjetosGantt != null){
+ recebe_projetoGantt = jsonProjetosGantt;
+ }
+ 
+//VALIDA SE O JSON CONTENDO OS DADOS DE PROJETOS ESTÃO VAZIOS
+ if(jsonTarefasGantt != null){
+ recebe_tarefaGantt = jsonTarefasGantt;
+ }
+  
+ // FUNÇÃO QUE REALIZARÁ A ANÁLISE DE PROJETOS QUE ESTÃO SELECIONADOS(CHECKED)
+ checked_project = [];
+ for(i=0;i<recebe_projetoGantt.length;i++){
+  
+ if(document.getElementById("cb_prj"+recebe_projetoGantt[i]['prj_id']+"").checked){
+ checked_project.push(recebe_projetoGantt[i]['prj_id']);
+ }
+ }
+  
+ vetor_preparaProjetos = [];
+ nomeInterdependencia = '';
+ if(recebe_projetoGantt != ''){
+	 if(recebe_tarefaGantt != ''){
+ 
+		 for(i=0; i<recebe_projetoGantt.length;i++){
+			 for(y=0;y<checked_project.length;y++){
+					 if(checked_project[y] == recebe_projetoGantt[i]['prj_id']){
+  
+  
+						 for(x=0;x<recebe_tarefaGantt.length;x++){
+								 if(recebe_tarefaGantt[x]['trf_id'] == recebe_tarefaGantt[x]['trf_interdependencia']){
+								 nomeInterdependencia = recebe_tarefaGantt[x]['trf_name'];
+									 }
+							 if(recebe_tarefaGantt[x]['fk_prj_id'] == recebe_projetoGantt[i]['prj_id']){
+  
+								 linha = [recebe_tarefaGantt[x]['trf_id'], recebe_tarefaGantt[x]['trf_name'],recebe_tarefaGantt[x]['trf_datainicial'], recebe_tarefaGantt[x]['trf_datafinal'], recebe_tarefaGantt[x]['trf_interdependencia'], recebe_tarefaGantt[x]['trf_progresso'], recebe_projetoGantt[i]['prj_color'] ];
+								 vetor_preparaProjetos.push(linha);
+								 }
+						 }
+				 }
+			 }
+		 }
+  
+ if(vetor_preparaProjetos != ''){
+ tasks = []; //CRIA VETOR PARA RECEBER JSON
+  
+ // REALIZA O ENVIO DOS DADOS DOS PROJETOS PARA A API PARA QUE SEJA RETORNADO OS PARÂMETROS NECESSÁRIOS PARA IMPLEMENTAR NO GRÁFICO
+ for(i = 0; i< vetor_preparaProjetos.length;i++){ //FAZ A VARREDURA NO VETOR PARA CRIAR JSON
+						 tasks.push({ //CARREGA O JSON COM AS INFORMAÇÕES NECESSÁRIAS PARA CARREGAR O GRÁFICO GANTT
+						 'id': 'Task'+vetor_preparaProjetos[i][0],
+						 'name': vetor_preparaProjetos[i][1],
+						 'start': vetor_preparaProjetos[i][2],
+						 'end': vetor_preparaProjetos[i][3],
+						 'dependencies': 'Task'+vetor_preparaProjetos[i][4],
+						 'progress': vetor_preparaProjetos[i][5], 
+						 'custom_class': 'tcolor-'+vetor_preparaProjetos[i][0] 
+					 });
+  
+ }
+ //console.log("TASKS: "+tasks+""); //TESTE DE INTEGRIDADE
+ gantt = new Gantt('#gantt', tasks, { 
+ on_click: function (task) {
+ console.log(task);
+ document.querySelector('style').innerHTML = '';
+  
+ cores_tarefas();
+ },
+ on_date_change: function(task, start, end) {
+ console.log(recebe_tarefaGantt)
+ console.log(task, start, end);
+ const trf_id = parseInt(task.id.replace("Task",""))
+ const tarefa = recebe_tarefaGantt.filter(_ => _.trf_id == trf_id)[0]
+ tarefa.trf_datainicial = start.toISOString().split("T")[0]
+ tarefa.trf_datafinal = end.toISOString().split("T")[0]
+ putAtualizaTarefa(tarefa)
+  
+ },
+ on_progress_change: function(task, progress) {
+ console.log(task, progress);
+ },
+ on_view_change: function(mode) {
+ console.log(mode);
+ },
+ custom_popup_html: function(task) {
+  
+ // the task object will contain the updated
+ // dates and progress value
+  
+ //const end_date = task._end.format('MMM D');
+ nome_pessoa_gantt = '';
+	 for(i=0;i<recebe_tarefaGantt.length;i++){
+					 if(task.name ==  recebe_tarefaGantt[i]['trf_name']){
+					 dt_final_tarefa = recebe_tarefaGantt[i]['trf_datafinal'];
+					 cod_tarefa_gantt = recebe_tarefaGantt[i]['trf_id'];
+					 for(x=0;x<recebe_distribuicaoGantt.length;x++){
+							 if(recebe_distribuicaoGantt[x]['fk_trf_id'] == cod_tarefa_gantt){
+							 cod_pessoa_gantt = recebe_distribuicaoGantt[x]['fk_pes_id'];
+					  
+									 for(y=0;y<recebe_pessoasGantt.length;y++){
+											 if(cod_pessoa_gantt == recebe_pessoasGantt[y]['pes_id']){
+											 nome_pessoa_gantt = recebe_pessoasGantt[y]['pes_nome'];
+											 }
+									 }
+						 }
+					 }
+					  
+ }
+ }
+ split_dt_final_tarefa = dt_final_tarefa.split('-');
+ reverse_dt_final_tarefa = split_dt_final_tarefa.reverse();
+ join_dt_final_tarefa = reverse_dt_final_tarefa.join('-');
+  
+  
+ return `
+ <div class="details-container">
+ <label>${task.name}</label>
+ <p>Expected to finish by ${join_dt_final_tarefa}</p>
+ <p>${task.progress}% completed!</p>
+ <p>Pessoa: ${nome_pessoa_gantt} </p>
+ </div>
+ `;
+ }
+ });
+  
+ cores_tarefas();
+  
+ }
+ }
+}
+}
+```
+Para criar esta integração foi bastante dificultoso, pois foi necessário aprender como trabalhar com envio de parâmetros para a API e entender como os dados eram retornados para assim serem utilizados e inseridos no gráfico.
+
+Em relação à troca de cores dos projetos também foi bastante dificultoso, pois foi necessário compreender um pouco mais afundo sobre DOM e assim realizar a troca da cor diretamente na tag div em HTML.
+
 * Auxilio na escolha das tecnologias do projeto;
 * Auxilio na criação de ideias do projeto;
 * Auxilio na criação na documentação do projeto;
