@@ -1,4 +1,5 @@
 
+
 # Portfólio TG - API's - Trabalho de Graduação em BD I
 
 #
@@ -560,34 +561,101 @@ function carregaGantt(jsonProjetosGantt, jsonTarefasGantt){
 }
 }
 ```
-Para criar esta integração foi bastante dificultoso, pois foi necessário aprender como trabalhar com envio de parâmetros para a API e entender como os dados eram retornados para assim serem utilizados e inseridos no gráfico.
 
-Em relação à troca de cores dos projetos também foi bastante dificultoso, pois foi necessário compreender um pouco mais afundo sobre DOM e assim realizar a troca da cor diretamente na tag div em HTML.
+Para criar esta integração foi bastante dificultoso, pois foi necessário aprender como trabalhar
+com envio de parâmetros para a API e entender como os dados eram retornados para assim serem
+utilizados e inseridos no gráfico.
 
-* Auxilio na escolha das tecnologias do projeto;
-* Auxilio na criação de ideias do projeto;
-* Auxilio na criação na documentação do projeto;
+Em relação à troca de cores dos projetos também foi bastante dificultoso, pois foi necessário
+compreender um pouco mais afundo sobre DOM e assim realizar a troca da cor diretamente na tag
+div em HTML.
+
+
+* Auxilio na escolha das tecnologias do projeto:
+
+	*	Inicialmente, a ideia era a utilização de tecnologias em que já estavam sendo ministradas neste
+determinado semestre, para que pudéssemos adquirir conhecimento e concluir o semestre com boas 
+notas.
+Pensamos também em trabalhar com tecnologias que são muito utilizadas no mercado, como: Criação 
+de API's; Front-End moderno; SCRUM como metodologia ágil; Back-End com Django;
+
+
+* Auxilio na criação de ideias do projeto:
+
+	*	O auxilio na criação das ideias do projeto envolve não só pensar em tecnologias, envolve o plano
+de negócio do cliente, envolve o que o cliente deseja em questão de agilidade na utilização, em 
+como a aplicação vai favorecê-lo quando foi utilizá-la. Por isso, a ideia inicial do projeto é a 
+etapa principal e requer muito cuidado e projeção. Não podemos idealizar algo que não atenda ou 
+que seja algo muito ruim de utilização. A performance foi uma das principais ideias que foram 
+levantadas.
+
+
+* Auxilio na criação na documentação do projeto:
+
+	*	Após a idealização do projeto, é necessário levantar a documentação que será feita de todo o
+escopo do projeto, da arquitetura, dos processos. Devido a isso, criamos: Caso de Uso; Modelo
+EER; Desenho da arquitetura do projeto; Burndown das sprints; Vídeos explicativos; Imagens
+ilustrando as telas da aplicação;
 
 
 <b>Aprendizados Efetivos</b>
 
-* Aprendizado no que se trata uma API;
-* Aprendizado em trabalhar com requisições GET, PUT, POST e DELETE utilizando a linguagem Javascript;
-* Aprendizado em HTML e CSS;
-* Aprendizado em Django Rest Framework;
-* Aprendizado em Models, Views e Templates do Django;
-* Aprendizado em implementação de dados do Django conectando ao banco de dados PostgreSQL;
-* Aprendizado no sistema operacional Linux com base Debian;
-* Aprendizado em trabalhar em equipe utilizando a metodologia ágil SCRUM;
-* Aprendizado em utilização de repositórios de código utilizando comandos do GIT;
-* Aprendizado no que seria Front-End, Back-End;
-* Aprendizado no que é deploy e a realizar deploy da aplicação em servidor do Heroku;
+* Aprendizado no que se trata uma API:
+
+	*	Eu já havia feito Programação e Desenvolvimento de Sistemas em 2010 e quando comecei a estudar 
+na Fatec, foi quando eu retornei aos estudos na área de programação. Com isso, mesmo com a minha
+bagagem de experiência na área de Infra de Redes, o termo e o que é API foi algo bem complexo 
+de entender e aplicar em prática. Foi algo muito divertido, envolvente e desafiador aplicar a
+criação de API em nosso projeto.
+
+
+
+* Aprendizado em trabalhar com requisições GET, PUT, POST e DELETE utilizando a linguagem Javascript:
+
+	*	Após entender como era o funcionamento e como criava uma API no back-end, mais precisamente
+utilizando o Django Rest Framework, criamos por meio do JavaScript as funções de requisições,
+fazendo com que a gente conseguisse coletar, deletar, criar ou atualizar dados diretamente no 
+banco de dados, utilizando credenciais de acesso da aplicação como segurança.
+
+
+* Aprendizado em HTML e CSS:
+
+	*	Para quem nunca havia entrado no mundo de desenvolvimento Web, apenas Desktop, foi um desafio bem grande como era a criação de templates em HTML e utilizar CSS para dar estilo. Foi muito animador e muito prazeroso aprender sobre esse assunto e hoje eu utilizo muito para a criação de minhas aplicações profissionais e educacionais.
+
+* Aprendizado em Django Rest Framework:
+
+	*	Após entender o que era API e como uma API funcionava, era partir para a parte prática. Utilizamos o Django Rest Framework como Framework para a criação da API. Utilizamos como método de autenticação as credenciais de acesso da própria aplicação.
+
+* Aprendizado em Models, Views e Templates do Django:
+
+	*	O modelo MVC e MVT eram termos que eu ainda não conhecia que são termos do mundo de desenvolvimento de aplicações web. Ao estudar Django mais a fundo, descobri que é utilizado o modelo MVT, onde Model é utilizado para a criação de tabela em banco de dados, Views é utilizado para trabalhar com a "transmissão" e "recebimento" de dados com os templates (Front-End: HMTL; CSS; JS;)
+
+* Aprendizado em implementação de dados do Django conectando ao banco de dados PostgreSQL:
+
+	*	Foi entendido que o Django utiliza de drivers desenvolvidos em python para a conexão e administração do banco de dados através do Model do Django. Alguns deles seriam: Psycopg2; Pymongo; pyodbc; SqlLite;
+ 
+* Aprendizado no sistema operacional Linux com base Debian:
+
+	*	Ao trabalhar com a linguagem Python e com o framework Django, entendi que era hora de desenvolver em ambiente Linux, no qual eu já era familiarizado por trabalhar com esse O.S. 
+
+* Aprendizado em trabalhar em equipe utilizando a metodologia ágil SCRUM:
+	
+	* Como no projeto anterior, foi utilizado a metodologia SCRUM como metodologia ágil. Desta forma, conseguimos praticar ainda mais esta metodologia e aplicar novos conceitos. 
+	
+* Aprendizado em utilização de repositórios de código utilizando comandos do GIT:
+
+	* Em todo o projeto, utilizamos do GitLab como repositório de arquivos. Com isso, praticamos ainda mais o seu uso e a sua aplicabilidade. 	
+
+* Deploy Heroku:
+
+	*	Para que pudéssemos publicar a nossa aplicação, utilizamos de uma plataforma gratuita Heroku. 
+
 
 #
 #
 <h3>3º Semestre:</h3>
 
-* <B>Projeto GANTT PLANNER - Grupo PHPYTHON:</b>
+* <B>Projeto SCORE WIZARD</b>
 
 <b>Objetivo do API:</b>
 
