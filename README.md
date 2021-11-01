@@ -609,31 +609,150 @@ de entender e aplicar em prática. Foi algo muito divertido, envolvente e desafi
 criação de API em nosso projeto.
 
 
-
 * Aprendizado em trabalhar com requisições GET, PUT, POST e DELETE utilizando a linguagem Javascript:
 
 	*	Após entender como era o funcionamento e como criava uma API no back-end, mais precisamente
 utilizando o Django Rest Framework, criamos por meio do JavaScript as funções de requisições,
 fazendo com que a gente conseguisse coletar, deletar, criar ou atualizar dados diretamente no 
 banco de dados, utilizando credenciais de acesso da aplicação como segurança.
+	
+		Algumas das dificuldades que tive na criação da API, foi utilizá-la em servidores em nuvem, no qual foi necessário entender que era necessário utilizar parâmetros no cabeçalho para métodos de POST, DELETE E PUT para que a conexão fosse de fato estabelecida e confiável. Um exemplo desse cabeçalho em Javascript:
+		
+	![image](https://user-images.githubusercontent.com/62898187/139694311-3873a323-7f25-46ff-8aa6-a750737a0dd7.png)
+
+	Com este cabeçalho configurado, foi possível hospedar a aplicação na nuvem e trabalhar normalmente.
 
 
 * Aprendizado em HTML e CSS:
 
 	*	Para quem nunca havia entrado no mundo de desenvolvimento Web, apenas Desktop, foi um desafio bem grande como era a criação de templates em HTML e utilizar CSS para dar estilo. Foi muito animador e muito prazeroso aprender sobre esse assunto e hoje eu utilizo muito para a criação de minhas aplicações profissionais e educacionais.
 
+		Um dos desafios mais interessantes que eu enfrentei com o trabalho de desenvolver o Front-End, foi, sem dúvida, criar os projetos, inserir as tarefas nesse projeto e diferenciá-los com cores, para que fosse possível diferenciar um projeto do outro com uma maior facilidade. Um exemplo do código que foi utilizado para criar essa funcionalidade foi a função:
+
+```javascript
+function add_prj_menu_esquerdo(jsonprj){
+ document.getElementById("prj_cadastrados").innerHTML = ''; 
+ vetor_prjcadastrados = [];
+  
+ for(i = 0;i<json.length;i++){
+ /*CARREGA VETOR PARA CADASTRAR PROJETO NO MENU LATERAL ESQUERDO */
+ 
+ //CRIA VALOR PARA ADICIONAR NA DIV "prj_cadastrados"
+ add_btn_prj_menu_esquerdo = [json[i]['prj_id'],"<div class='div_shadow' 
+ style='background-color:"+json[i]['prj_color']+"'><input id='cb_prj"+json[i]['prj_id']+"' 
+ type='checkbox' ><button id='btn_prj"+json[i]['prj_id']+"' 
+ onClick='expandeTrf(this.id);dadosProjeto(this.id);'class='btn_shadow0' style='background-
+ color:"+json[i]['prj_color']+"'>"+json[i]['prj_nome']+"</button></div> "];
+
+//ADICIONA LINHA PARA CRIAÇÃO DO BTN DE PROJETO
+ vetor_prjcadastrados.push(add_btn_prj_menu_esquerdo);
+ ///////////////////
+ }
+ /*ENVIA PROJETO AO MENU LATERAL ESQUERDO*/
+
+//ZERA DIV PARA NOVOS BUTTONS
+ document.getElementById("prj_cadastrados").innerHTML = ''; 
+
+// VARREDURA DO VETOR CRIADO COM OS INSERTS PARA A DIV
+ for(i = 0; i<vetor_prjcadastrados.length;i++){ 
+	//ADICIONA OS INSERTS NA DIV 
+	 document.getElementById("prj_cadastrados").innerHTML +=  vetor_prjcadastrados[i][1];
+  //CRIA NOVA DIV PARA RECEBER TAREFAS CORRESPONDENTES AO PROJETO CRIADO
+	 novaDivTrf = document.createElement("div");
+  //NOME DA DIV PARA RECEBER AS TAREFAS
+	 novaDivTrf.id = "trf_cadastradas_prj"+vetor_prjcadastrados[i][0]+"";
+  //ADICIONA A DIV ABAIXO DO PROJETO CRIADO
+	 document.getElementById("prj_cadastrados").appendChild(novaDivTrf);
+ ////////////////////////////////// 
+ }
+  
+//FUNÇÃO ABAIXO INSERE AS TAREFAS NO PROJETO SELECIONADO PASSANDO O JSON COMO PARÂMETRO
+ vetorTrfCadastrados(json, null); 
+}	
+```
+Nesta etapa, é realizada a inserção das tarefas no projeto criado acima:
+```javascript
+/*EXPANDE TAREFAS MENU CENTRAL ESQUERDO*/
+recebe_vetorprojeto = [];
+recebe_vetortarefa = [];
+///FUNÇÃO ATRIBUÍDA PARA O BTN GRAVAR TAREFA
+function vetorTrfCadastrados(vetor_projeto, vetor_tarefa){
+ vetor_trfcadastrados = [];
+ if(vetor_projeto != null){
+ recebe_vetorprojeto = vetor_projeto;
+ }
+ if(vetor_tarefa != null){
+ recebe_vetortarefa = vetor_tarefa;
+ }
+if(recebe_vetorprojeto != '' && recebe_vetortarefa != ''){
+ for(i=0;i<recebe_vetorprojeto.length;i++){//VARREDURA NOS PROJETOS CADASTRADOS
+ recebeCodPrj = recebe_vetorprojeto[i]['prj_id'];  //SELECIONA O CODIGO DO PROJETO 
+ for(x=0; x<recebe_vetortarefa.length;x++){ //VARREDURA NAS TAREFAS CADASTRADAS
+ if(recebeCodPrj == recebe_vetortarefa[x]['fk_prj_id']){//VALIDA O CODIGO DO PROJETO DO CADASTRO DE PROJETO AO CODIGO DO PROJETO NO CADASTRO DE TAREFA E CRIA UM VETOR PARA INSERIR NA DIV CRIADA.
+  
+ codTrf = recebe_vetortarefa[x]['trf_id']; //CODIGO DA TAREFA - TABELA TAREFA
+  
+ recebeNomeTrf = recebe_vetortarefa[x]['trf_name']; //NOME DA TAREFA - TABELA TAREFA 
+ corProjeto = recebe_vetorprojeto[i]['prj_color']; //COR DO PROJETO - TABELA PROJETO 
+ add_btn_trf_menu_esquerdo = [recebeCodPrj,"<button id='btn_trf"+codTrf+"' onClick='dadosTarefa(this.id)' class='btn_shadow3' style='border-color:"+corProjeto+"'>"+recebeNomeTrf+"</button>"]; // CRIA LINHA PARA NOVOS BOTÕES DE TAREFAS, ABAIXO DO PROJETO CORRESPONDENTE
+  
+ vetor_trfcadastrados.push(add_btn_trf_menu_esquerdo);//ADICIONA NO VETOR AS TAREFAS CADASTRADAS E SEUS RESPECTIVOS BOTÕES, COM O ID DO PROJETO NO ÍNDICE 0 
+ } 
+ } 
+ }
+ //console.log(vetor_trfcadastrados);//VERIFICA INTEGRIDADE DO VETOR 
+}
+}
+
+```
+
+Esta função expande o projeto criado, mostrando quais tarefas foram inseridas nele.
+```javascript
+///FUNÇÃO ATRIBUÍDA PARA O BTN PROJETO NO MENU LATERAL ESQUERDO
+function expandeTrf(nomeBtn){
+  
+ divideBtn = nomeBtn.substr(7);//REMOVE E DEIXA APENAS O NÚMERO DE IDENTIFICAÇÃO DO BOTÃO DE CADA TAREFA "btn_trf'num exemplo'"
+  
+ selecionaDiv = document.getElementById('trf_cadastradas_prj'+divideBtn+'').textContent;//SELECIONA A DIV DE CADA PROJETO E VERIFICA SE TEM CONTEÚDO DENTRO
+ if(selecionaDiv == ''){//CASO NÃO TENHA CONTEÚDO
+  
+ for(i=0;i<vetor_trfcadastrados.length;i++){//FAZ VARREDURA NOS BOTÕES DAS TAREFAS
+  
+  
+ if(divideBtn == vetor_trfcadastrados[i][0]){ //CASO O NÚMERO DE IDENTIFICAÇÃO DO BTN DA TAREFA SEJA IGUAL AO ID DE CADA PROJETO, É ADICIONADO O BOTÃO NA DIV CORRESPONDENTE
+  
+ document.getElementById('trf_cadastradas_prj'+divideBtn+'').innerHTML += vetor_trfcadastrados[i][1];//ADICIONA OS BOTÕES DAS TAREFAS NAS DIV'S DOS PROJETOS CORRESPONDENTES
+ } 
+ }
+ }else{
+ document.getElementById('trf_cadastradas_prj'+divideBtn+'').remove() //CASO TENHA CONTEÚDO NA DIV, ELE É ELIMINADO. ISSO FOI FEITO PARA CRIAR O RECUO.
+ add_prj_menu_esquerdo();//ADICIONA NOVAMENTE A DIV DO PROJETO
+ getAllProjects();
+ }
+}
+```
 * Aprendizado em Django Rest Framework:
 
 	*	Após entender o que era API e como uma API funcionava, era partir para a parte prática. Utilizamos o Django Rest Framework como Framework para a criação da API. Utilizamos como método de autenticação as credenciais de acesso da própria aplicação.
+
+		O método de autenticação é configurado no arquivo settings.py do Django e a nossa configuração ficou da seguinte forma:
+		![image](https://user-images.githubusercontent.com/62898187/139694944-7da04e01-480b-4467-a820-66e703fae2a2.png)
+
+Com esta configuração, foi possível trabalhar tanto com autenticação da aplicação, quanto Token.
 
 * Aprendizado em Models, Views e Templates do Django:
 
 	*	O modelo MVC e MVT eram termos que eu ainda não conhecia que são termos do mundo de desenvolvimento de aplicações web. Ao estudar Django mais a fundo, descobri que é utilizado o modelo MVT, onde Model é utilizado para a criação de tabela em banco de dados, Views é utilizado para trabalhar com a "transmissão" e "recebimento" de dados com os templates (Front-End: HMTL; CSS; JS;)
 
-* Aprendizado em implementação de dados do Django conectando ao banco de dados PostgreSQL:
+* Aprendizado em implementação de dados do Django conectando ao banco de dados SQLite3:
 
-	*	Foi entendido que o Django utiliza de drivers desenvolvidos em python para a conexão e administração do banco de dados através do Model do Django. Alguns deles seriam: Psycopg2; Pymongo; pyodbc; SqlLite;
+	*	Foi entendido que o Django utiliza de drivers desenvolvidos em python para a conexão e administração do banco de dados através do Model do Django. Alguns deles seriam: Psycopg2; Pymongo; pyodbc; SqlLite;	
+	![image](https://user-images.githubusercontent.com/62898187/139695726-cb2faff6-5c6b-4097-8c77-7db7df27ac90.png)
+	Este é um exemplo de Connection String do Django para o SQLite3, no qual é criado um arquivo .sql na pasta do projeto.
  
+		 ![image](https://user-images.githubusercontent.com/62898187/139696059-ee21c915-5fc4-43cd-9052-e2619ee98222.png)
+Este é um exemplo de um model que foi criado em nosso projeto. O Django faz a conexão com o banco e cria automaticamente o model, com as colunas programadas de acordo com o que é passado no próprio model.
+
 * Aprendizado no sistema operacional Linux com base Debian:
 
 	*	Ao trabalhar com a linguagem Python e com o framework Django, entendi que era hora de desenvolver em ambiente Linux, no qual eu já era familiarizado por trabalhar com esse O.S. 
@@ -648,7 +767,7 @@ banco de dados, utilizando credenciais de acesso da aplicação como segurança.
 
 * Deploy Heroku:
 
-	*	Para que pudéssemos publicar a nossa aplicação, utilizamos de uma plataforma gratuita Heroku. 
+	*	Para que pudéssemos publicar a nossa aplicação, utilizamos de uma plataforma gratuita Heroku, e que ainda temos ele de pé do servidor em nuvem: http://pi-gantt-planner.herokuapp.com
 
 
 #
@@ -778,7 +897,8 @@ Para o cadastro acima, foi utilizado o seguinte código:
 
 * Aprendizado de como funciona o cálculo do score;
 	* O cálculo do Score utiliza de muitos fatores para que seja criado um Score compatível com a atual  situação de cada pessoa. São muitas variáveis e métricas que resultam em um valor, não sendo o mesmo para SPC, SERASA e etc... Cada empresa possui um cálculo distinto, são métricas distintas, mas para que possamos analisar um pouco o que seriam estes cálculos, temos a seguir as seguintes variáveis:
-	 Negativo
+	 
+		-Pontos Negativos:
 		*	Quantidade de parcelas atrasadas com cartão de crédito;
 		* Situação das parcelas atrasadas e se é uma pessoa que não costuma pagar em dia;
 		* Solicitação de empréstimos e recusa do banco;
@@ -787,19 +907,23 @@ Para o cadastro acima, foi utilizado o seguinte código:
 		* Solicitação de cartão de crédito e recusa do banco;
 		* Quantidade de vezes que o CPF é consultado;
 		* Contas não pagas e nome sujo;
-Positivo
+
+		-Pontos Positivos
 		*	Solicitação de cartão de crédito e aceite pelo banco;
 		* Nome limpo;
 		* Não possuir empréstimos contratados;
 		* Faturas de cartão pagas e em dia;
 		* Poucas consultas de CPF;
 
-* Aprendizado a trabalhar com dados "mockados";
-* Aprendizado em trabalhar com layout do Front-End, utilizando Bootstrap 4, CSS e HTML;
-* Aprendizado de como liderar a equipe;
-* Aprendizado em apresentar um projeto de software;
-* Aprendizado em User Story;
-* Aprendizado em Burndown e prazos de entrega na metodologia ágil;
+* Aprendizado a trabalhar com dados "mockados":
+
+	*	Para que pudéssemos criar os filtros e cálculos do Score, recebemos do SPC dados Mockados em .csv, onde realizamos a criação dos filtros e análises de Score. Foram filtrados dados das seguintes tabelas: Fontes; Modalidades; Pessoa Física; Movimentos; Pagamentos; Operáveis; 
+	![image](https://user-images.githubusercontent.com/62898187/139692376-5567e68d-7221-4a3e-8e9a-013ffee50222.png)
+
+
+* Aprendizado em trabalhar com layout do Front-End, utilizando Bootstrap 4, CSS e HTML:
+
+	*	Para este projeto, utilizamos Bootstrap 4 e CSS Puro para criar os layouts juntamente com o HTML. A ideia da utilização do Bootstrap foi que existe uma facilidade para se trabalhar com Forms e CheckButtons utilizando este framework. Facilitou e nos deu agilidade na criação de nosso Front-End.
 
 
 #
