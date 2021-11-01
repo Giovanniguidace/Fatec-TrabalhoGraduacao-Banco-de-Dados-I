@@ -260,7 +260,6 @@ def waitDownload(self):
 
 * <B>Projeto GANTT PLANNER - Grupo PHPYTHON:</b>
 
-
 <b>Objetivo do API:</b>
 
 O desenvolvimento desse projeto partiu de uma demanda da empresa Necto, a partir de seu CEO Carlos Eduardo, que era de uma ferramenta que fosse fácil de mexer, que fosse portátil e ao mesmo tempo flexível para auxiliar no planejamento de seus projetos. Manipular um gráfico de Gantt afim de conquistar esses objetivos será o cerne do projeto. Outro fator decisivo para o desenvolvimento é a limitação que outras ferramentas semelhantes à do nosso projeto que impossibilitam ou dificultam muito a visualização da empresa como um todo, afim de conseguir conciliar o desenvolvimento de vários projetos simultaneamente com a distribuição da equipe da melhor forma possível, além de ter uma melhor distribuição dos recursos financeiros.
@@ -933,7 +932,7 @@ Para o cadastro acima, foi utilizado o seguinte código:
 * <B>Projeto NEMO API - Grupo NEMO:</b>
 
 
-![minipic](https://gitlab.com/felipemessibraga/pi-1sem-2021/uploads/d3295be8d95140beb572615b52a02a87/Nemo_API__1_.png =200x200) 
+![minipic](https://gitlab.com/felipemessibraga/pi-1sem-2021/uploads/d3295be8d95140beb572615b52a02a87/Nemo_API__1_.png) 
 
 
 <b>Objetivo do API:</b>
@@ -1089,7 +1088,7 @@ Query("SELECT c FROM Candidate c " +
 
 	*	Ao participar das reuniões com o cliente, tivemos uma reunião de grupo, onde definimos estratégias de tarefas e cronogramas de entrega. Com isso, participei junto à equipe destas decisões, focando no plano de negócio do cliente e qual a necessidade do mesmo.
 
-![Backlog do Produto](https://gitlab.com/felipemessibraga/pi-1sem-2021/uploads/d95019d0b68b3054838f0a3c45a4ca3b/Backlog_do_Produto.jpg =800x400)
+![Backlog do Produto](https://gitlab.com/felipemessibraga/pi-1sem-2021/uploads/d95019d0b68b3054838f0a3c45a4ca3b/Backlog_do_Produto.jpg)
 
 * Criação de servidor na AWS;
 
@@ -1105,7 +1104,7 @@ Com isso, o CI/CD foi transferido para o Heroku, conforme imagens abaixo:
 
 Foi configurado o CI/CD da aplicação, onde foi criado um Pipeline de Build; Test; e Deploy; Ao executar o Deploy, já atualiza automaticamente o Deploy no servidor alocado no Heroku
 
-![image](https://user-images.githubusercontent.com/62898187/139724835-478095ba-2e90-4bc5-9846-2d4fad402d38.png =700x400)
+![image](https://user-images.githubusercontent.com/62898187/139724835-478095ba-2e90-4bc5-9846-2d4fad402d38.png)
 
 ![image](https://user-images.githubusercontent.com/62898187/139725292-bf394383-5fdb-4471-8e18-119e57562e66.png)
 
